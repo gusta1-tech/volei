@@ -1,0 +1,111 @@
+body{
+    background-color: rgb(116, 204, 255);
+}
+.cabecalho{
+    background-color: rgb(253, 251, 124);
+    text-align: center;
+    padding: 20px;
+    color: rgb(14, 14, 14);
+}
+.cabecalho img{
+    width: 10%;
+    height: auto;
+    border-radius: 50%;
+}
+.cabecalho h1{
+    margin: 10px 0 5px 0;
+}
+nav a{
+    color: rgb(55, 0, 255);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+nav a:hover{
+    text-decoration: underline;
+}
+.container-galeria{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+.item-galeria{
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    margin: 0;
+    text-align: center;
+    border: 1px solid blue;
+    border-radius: 8px;
+    padding-bottom: 10px;
+    background-color: rgb(157, 232, 255);
+    box-shadow: 0 4px 6px rgb(131, 255, 255);
+}
+.item-galeria img{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+.item-galeria figcaption{
+    margin-top: 10px;
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #333;
+    padding: 0 10px;
+}
+.container{
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.card{
+    background-color: azure;
+    width: 200px;
+    height: 250px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 2px solid blue;
+}
+.card:hover {
+    transform: translateY(-10px);
+    background-color: #fffaf0;
+}
+
+.card i {
+    font-size: 3rem;
+    color: #0400fd;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+
+
+/* Ajuste para telas muito pequenas */
+@media (max-width: 600px) {
+    .item-galeria {
+        flex: 1 1 100%;       /* Ocupa 100% da largura no celular */
+    }
+}

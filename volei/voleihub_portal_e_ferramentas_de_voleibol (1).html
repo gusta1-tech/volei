@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-PT" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoleiHub - Portal e Ferramentas de Voleibol</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos personalizados */
+        .court-bg {
+            background-color: #f97316; /* Laranja Voleibol */
+            background-image: radial-gradient(#ea580c 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .player-node {
+            touch-action: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <nav class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-orange-500 text-white p-2 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fa-solid fa-volleyball text-xl"></i>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-wider text-orange-500">VOLEI<span class="text-white">HUB</span></span>
+                </div>
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="#tactic-board" class="hover:text-orange-500 transition-colors">Prancheta Tática</a>
+                    <a href="#scoreboard" class="hover:text-orange-500 transition-colors">Marcador</a>
+                    <a href="#drills" class="hover:text-orange-500 transition-colors">Treinos</a>
+                    <a href="#gemini-chat" class="hover:text-orange-500 transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-wand-magic-sparkles text-orange-400"></i> Treinador AI
+                    </a>
+                </div>
+                <!-- Botão Menu Mobile -->
+                <button id="mobile-menu-btn" class="md:hidden text-slate-400 hover:text-white focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-950 border-b border-slate-800 px-4 py-3 flex flex-col gap-3">
+            <a href="#tactic-board" class="block py-2 text-slate-300 hover:text-orange-500 transition-colors">Prancheta Tática</a>
+            <a href="#scoreboard" class="block py-2 text-slate-300 hover:text-orange-500 transition-colors">Marcador</a>
+            <a href="#drills" class="block py-2 text-slate-300 hover:text-orange-500 transition-colors">Treinos</a>
+            <a href="#gemini-chat" class="block py-2 text-orange-400 hover:text-orange-500 transition-colors flex items-center gap-1">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Treinador AI
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 py-20 px-4 text-center overflow-hidden border-b border-slate-800">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        <div class="relative max-w-4xl mx-auto z-10">
+            <span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs uppercase tracking-widest font-bold py-1.5 px-4 rounded-full">
+                Sistemas Táticos, Treinos e Inteligência Artificial
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black mt-6 tracking-tight text-white">
+                Eleva o teu Jogo de <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">Voleibol</span>
+            </h1>
+            <p class="text-slate-400 mt-4 text-lg md:text-xl max-w-2xl mx-auto">
+                Cria sistemas táticos na nossa prancheta interativa, controla os teus jogos com o marcador oficial e consulta o nosso Treinador AI.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="#tactic-board" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-orange-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-chalkboard-user"></i> Ver Prancheta Tática
+                </a>
+                <a href="#gemini-chat" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold px-6 py-3 rounded-xl transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-robot"></i> Conversar com Treinador AI
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- PRANCHETA TÁTICA (TACTICAL BOARD) -->
+    <section id="tactic-board" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-white flex items-center justify-center gap-2">
+                <i class="fa-solid fa-chalkboard text-orange-500"></i> Prancheta Tática Interativa
+            </h2>
+            <p class="text-slate-400 mt-2">Arrasta os jogadores para planear rotações, sistemas de receção (W, 5-1, 4-2) ou jogadas ofensivas.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Painel de Controlos Táticos -->
+            <div class="lg:col-span-4 bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col gap-6">
+                <div>
+                    <h3 class="font-bold text-lg text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-orange-500"></i> Rotações e Sistemas
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="applySystem('base')" class="bg-slate-800 hover:bg-orange-500/20 hover:border-orange-500/50 border border-slate-700 text-xs py-2 px-3 rounded-lg font-semibold transition-all">
+                            Posições Base
+                        </button>
+                        <button onclick="applySystem('rececao-w')" class="bg-slate-800 hover:bg-orange-500/20 hover:border-orange-500/50 border border-slate-700 text-xs py-2 px-3 rounded-lg font-semibold transition-all">
+                            Receção em W
+                        </button>
+                        <button onclick="applySystem('ataque-k1')" class="bg-slate-800 hover:bg-orange-500/20 hover:border-orange-500/50 border border-slate-700 text-xs py-2 px-3 rounded-lg font-semibold transition-all">
+                            Ataque (K1)
+                        </button>
+                        <button onclick="applySystem('defesa-6-atras')" class="bg-slate-800 hover:bg-orange-500/20 hover:border-orange-500/50 border border-slate-700 text-xs py-2 px-3 rounded-lg font-semibold transition-all">
+                            Defesa (6 recuado)
+                        </button>
+                    </div>
+                </div>
+
+                <hr class="border-slate-800">
+
+                <!-- Legenda de Jogadores -->
+                <div>
+                    <h3 class="font-bold text-sm text-slate-400 uppercase tracking-wider mb-3">Legenda de Jogadores</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white">D</span>
+                            <span class="text-sm text-slate-300">Distribuidor (Setter)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-xs font-bold text-white">OP</span>
+                            <span class="text-sm text-slate-300">Oposto (Opposite)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-xs font-bold text-white">Z4</span>
+                            <span class="text-sm text-slate-300">Ponta / Zona 4 (Outside)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-xs font-bold text-black">C</span>
+                            <span class="text-sm text-slate-300">Central (Middle Blocker)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold text-white">L</span>
+                            <span class="text-sm text-slate-300">Líbero (Libero)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-slate-800">
+
+                <!-- Controlos Rápidos do Campo -->
+                <div>
+                    <h3 class="font-bold text-sm text-slate-400 uppercase tracking-wider mb-2">Ações Rápidas</h3>
+                    <button onclick="resetBoard()" class="w-full bg-rose-950/40 hover:bg-rose-900 border border-rose-800 text-rose-300 font-bold py-2.5 px-4 rounded-xl transition-all text-sm">
+                        <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Reiniciar Posicionamento
+                    </button>
+                    <p class="text-[11px] text-slate-500 mt-2 text-center">Para mover os jogadores, clique e arraste cada um deles no campo ao lado.</p>
+                </div>
+            </div>
+
+            <!-- Campo de Voleibol Interativo (Drag & Drop) -->
+            <div class="lg:col-span-8 flex flex-col items-center">
+                <div class="relative w-full max-w-xl aspect-[1.1] bg-slate-950 border-4 border-slate-800 rounded-3xl p-4 shadow-2xl overflow-hidden">
+                    
+                    <!-- O Campo de Voleibol (SVG/CSS) -->
+                    <div id="volleyball-court" class="relative w-full h-full bg-orange-600 rounded-xl border-4 border-white overflow-hidden shadow-inner flex flex-col justify-between">
+                        <!-- Rede e Poste Central -->
+                        <div class="absolute top-1/2 left-0 right-0 h-1 bg-slate-200 z-10 shadow-md">
+                            <!-- Antenas/Varas e Rede Detalhe -->
+                            <div class="absolute left-4 -top-3 w-1.5 h-7 bg-red-600 rounded-sm"></div>
+                            <div class="absolute right-4 -top-3 w-1.5 h-7 bg-red-600 rounded-sm"></div>
+                            <div class="absolute inset-x-0 -top-1 h-3 border-b border-dashed border-slate-400 opacity-50"></div>
+                        </div>
+
+                        <!-- Linhas de Ataque (3 metros) -->
+                        <!-- Campo Superior (Adversário) -->
+                        <div class="absolute top-1/3 left-0 right-0 h-1 bg-white opacity-90"></div>
+                        <!-- Campo Inferior (Nossa Equipa) -->
+                        <div class="absolute bottom-1/3 left-0 right-0 h-1 bg-white opacity-90"></div>
+
+                        <!-- Marcadores de Zonas de Campo -->
+                        <div class="absolute top-4 left-4 text-xs font-semibold text-white/40">ZONA DE DEFESA ADVERSÁRIA</div>
+                        <div class="absolute bottom-4 left-4 text-xs font-semibold text-white/40">ZONA DE DEFESA PRÓPRIA</div>
+
+                        <!-- Meio Campo / Zona de Ataque -->
+                        <div class="absolute top-[40%] left-4 text-[10px] font-bold text-white/20 tracking-wider">ATAQUE (3M)</div>
+                        <div class="absolute bottom-[40%] left-4 text-[10px] font-bold text-white/20 tracking-wider">ATAQUE (3M)</div>
+
+                        <!-- Jogadores Draggables (Nossa Equipa no campo inferior) -->
+                        <!-- Distribuidor (D) -->
+                        <div id="p-distribuidor" class="player-node absolute cursor-move w-11 h-11 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center text-xs font-black text-white shadow-lg select-none z-20" style="bottom: 12%; left: 45%;">D</div>
+                        <!-- Oposto (OP) -->
+                        <div id="p-oposto" class="player-node absolute cursor-move w-11 h-11 rounded-full bg-red-600 border-2 border-white flex items-center justify-center text-xs font-black text-white shadow-lg select-none z-20" style="bottom: 38%; left: 78%;">OP</div>
+                        <!-- Central 1 (C1) -->
+                        <div id="p-central1" class="player-node absolute cursor-move w-11 h-11 rounded-full bg-yellow-500 border-2 border-white flex items-center justify-center text-xs font-black text-black shadow-lg select-none z-20" style="bottom: 38%; left: 45%;">C1</div>
+                        <!-- Central 2 (C2) -->
+                        <div id="p-central2" class="player-node absolute cursor-move w-11 h-11 rounded-full bg-yellow-500 border-2 border-white flex items-center justify-center text-xs font-black text-black shadow-lg select-none z-20" style="bottom: 12%; left: 15%;">C2</div>
+                        <!-- Zona 4 (Z4_1) -->
+                        <div id="p-ponta1" class="player-node absolute cursor-move w-11 h-11 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-xs font-black text-white shadow-lg select-none z-20" style="bottom: 38%; left: 15%;">Z4</div>
+                        <!-- Líbero (L) -->
+                        <div id="p-libero" class="player-node absolute cursor-move w-11 h-11 rounded-full bg-indigo-500 border-2 border-white flex items-center justify-center text-xs font-black text-white shadow-lg select-none z-20" style="bottom: 12%; left: 78%;">L</div>
+
+                        <!-- Bola de Vôlei -->
+                        <div id="p-ball" class="player-node absolute cursor-move w-8 h-8 rounded-full bg-amber-300 border-2 border-white flex items-center justify-center text-[10px] font-bold text-amber-950 shadow-xl select-none z-30" style="bottom: 25%; left: 48%;">
+                            <i class="fa-solid fa-volleyball"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARCADOR DE PONTOS (SCOREBOARD) -->
+    <section id="scoreboard" class="bg-slate-950 py-16 border-t border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs uppercase tracking-widest font-bold py-1 px-3 rounded-full">Marcador Virtual</span>
+                <h2 class="text-3xl font-black text-white mt-3 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-stopwatch text-orange-500"></i> Marcador Digital de Jogo
+                </h2>
+                <p class="text-slate-400 mt-2">Usa esta ferramenta para arbitrar os teus jogos amigáveis ou treinos oficiais.</p>
+            </div>
+
+            <!-- Painel do Marcador -->
+            <div class="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl">
+                <!-- Nomes e Serviço -->
+                <div class="grid grid-cols-2 gap-4 text-center mb-6">
+                    <div>
+                        <input type="text" value="EQUIPA CASEIRA" class="bg-transparent text-center text-lg md:text-xl font-bold text-white border-b border-transparent hover:border-slate-700 focus:border-orange-500 focus:outline-none w-full py-1">
+                        <div class="flex items-center justify-center mt-2">
+                            <span id="service-home" class="text-xs bg-orange-500 text-white px-2.5 py-1 rounded-full font-bold uppercase flex items-center gap-1">
+                                <i class="fa-solid fa-volleyball"></i> Serviço
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" value="VISITANTES" class="bg-transparent text-center text-lg md:text-xl font-bold text-white border-b border-transparent hover:border-slate-700 focus:border-orange-500 focus:outline-none w-full py-1">
+                        <div class="flex items-center justify-center mt-2">
+                            <span id="service-away" class="text-xs bg-slate-800 text-slate-500 px-2.5 py-1 rounded-full font-bold uppercase flex items-center gap-1 cursor-pointer hover:bg-slate-750 transition-colors" onclick="toggleService('away')">
+                                <i class="fa-solid fa-volleyball"></i> Serviço
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pontuação Principal -->
+                <div class="grid grid-cols-2 gap-8 items-center justify-center mb-8">
+                    <!-- Equipa Casa -->
+                    <div class="flex flex-col items-center">
+                        <div id="score-home" class="text-7xl md:text-9xl font-black text-white bg-slate-950 px-6 py-8 rounded-2xl border border-slate-800 w-full text-center shadow-inner select-none transition-all">
+                            00
+                        </div>
+                        <div class="flex gap-2 mt-4 w-full">
+                            <button onclick="changeScore('home', 1)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-md">
+                                <i class="fa-solid fa-plus text-lg"></i>
+                            </button>
+                            <button onclick="changeScore('home', -1)" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition-all border border-slate-700">
+                                <i class="fa-solid fa-minus text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Equipa Visitante -->
+                    <div class="flex flex-col items-center">
+                        <div id="score-away" class="text-7xl md:text-9xl font-black text-white bg-slate-950 px-6 py-8 rounded-2xl border border-slate-800 w-full text-center shadow-inner select-none transition-all">
+                            00
+                        </div>
+                        <div class="flex gap-2 mt-4 w-full">
+                            <button onclick="changeScore('away', 1)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-md">
+                                <i class="fa-solid fa-plus text-lg"></i>
+                            </button>
+                            <button onclick="changeScore('away', -1)" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition-all border border-slate-700">
+                                <i class="fa-solid fa-minus text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sets e Tempos -->
+                <div class="grid grid-cols-3 gap-4 border-t border-b border-slate-800 py-6 mb-6">
+                    <div class="text-center">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">Sets Casa</span>
+                        <div class="flex items-center justify-center gap-3 mt-2">
+                            <button onclick="changeSet('home', -1)" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs border border-slate-700">-</button>
+                            <span id="sets-home" class="text-2xl font-black text-orange-500">0</span>
+                            <button onclick="changeSet('home', 1)" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs border border-slate-700">+</button>
+                        </div>
+                    </div>
+                    <div class="text-center flex flex-col justify-center">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">SET ATUAL</span>
+                        <span id="current-set-num" class="text-2xl font-black text-white mt-1">1º Set</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">Sets Visitante</span>
+                        <div class="flex items-center justify-center gap-3 mt-2">
+                            <button onclick="changeSet('away', -1)" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs border border-slate-700">-</button>
+                            <span id="sets-away" class="text-2xl font-black text-orange-500">0</span>
+                            <button onclick="changeSet('away', 1)" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs border border-slate-700">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação do Marcador -->
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button onclick="requestTimeout()" class="bg-amber-600/20 hover:bg-amber-600/30 border border-amber-500/30 text-amber-300 text-xs font-bold py-2 px-4 rounded-xl transition-all">
+                        <i class="fa-solid fa-clock"></i> Pedir Tempo
+                    </button>
+                    <button onclick="switchSides()" class="bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-bold py-2 px-4 rounded-xl transition-all border border-slate-700">
+                        <i class="fa-solid fa-right-left"></i> Trocar de Campo
+                    </button>
+                    <button onclick="resetMatch()" class="bg-rose-950/40 hover:bg-rose-900 border border-rose-800 text-rose-300 text-xs font-bold py-2 px-4 rounded-xl transition-all">
+                        <i class="fa-solid fa-trash-can"></i> Reiniciar Jogo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BIBLIOTECA DE TREINOS (DRILLS) -->
+    <section id="drills" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+            <span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs uppercase tracking-widest font-bold py-1 px-3 rounded-full">Exercícios Recomendados</span>
+            <h2 class="text-3xl font-black text-white mt-3 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-dumbbell text-orange-500"></i> Biblioteca de Treinos de Voleibol
+            </h2>
+            <p class="text-slate-400 mt-2">Explora exercícios técnicos detalhados para melhorar as tuas bases desportivas.</p>
+        </div>
+
+        <!-- Filtros -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" id="drill-filters">
+            <button onclick="filterDrills('all')" class="drill-filter-btn bg-orange-500 text-white text-xs font-bold py-2.5 px-5 rounded-full transition-all">Todos</button>
+            <button onclick="filterDrills('passe')" class="drill-filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 px-5 rounded-full transition-all">Passe / Distribuição</button>
+            <button onclick="filterDrills('rececao')" class="drill-filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 px-5 rounded-full transition-all">Manchete / Receção</button>
+            <button onclick="filterDrills('ataque')" class="drill-filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 px-5 rounded-full transition-all">Remate / Bloco</button>
+            <button onclick="filterDrills('servico')" class="drill-filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 px-5 rounded-full transition-all">Serviço</button>
+        </div>
+
+        <!-- Lista de Treinos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="drills-container">
+            <!-- Drill 1 -->
+            <div class="drill-card bg-slate-950 border border-slate-800 rounded-2xl p-6 hover:border-orange-500/30 transition-all group" data-category="passe">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold py-1 px-2.5 rounded-full uppercase">Passe / Distribuição</span>
+                    <span class="text-slate-500 text-xs flex items-center gap-1"><i class="fa-regular fa-clock"></i> 15m</span>
+                </div>
+                <h3 class="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">Passe de Precisão no Alvo</h3>
+                <p class="text-slate-400 text-sm mt-2">Os distribuidores devem efetuar passes consecutivos para dentro de um aro ou cesto posicionado junto à rede.</p>
+                <div class="mt-4 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
+                    <span>Intensidade: Média</span>
+                    <span>Jogadores: 2+</span>
+                </div>
+            </div>
+
+            <!-- Drill 2 -->
+            <div class="drill-card bg-slate-950 border border-slate-800 rounded-2xl p-6 hover:border-orange-500/30 transition-all group" data-category="rececao">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold py-1 px-2.5 rounded-full uppercase">Manchete / Receção</span>
+                    <span class="text-slate-500 text-xs flex items-center gap-1"><i class="fa-regular fa-clock"></i> 20m</span>
+                </div>
+                <h3 class="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">Carrossel de Receção Dinâmica</h3>
+                <p class="text-slate-400 text-sm mt-2">Três recetores posicionados em campo. O treinador serve continuamente e, após cada toque, o jogador roda.</p>
+                <div class="mt-4 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
+                    <span>Intensidade: Alta</span>
+                    <span>Jogadores: 6+</span>
+                </div>
+            </div>
+
+            <!-- Drill 3 -->
+            <div class="drill-card bg-slate-950 border border-slate-800 rounded-2xl p-6 hover:border-orange-500/30 transition-all group" data-category="ataque">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-bold py-1 px-2.5 rounded-full uppercase">Remate / Bloco</span>
+                    <span class="text-slate-500 text-xs flex items-center gap-1"><i class="fa-regular fa-clock"></i> 15m</span>
+                </div>
+                <h3 class="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">Ataque com Transição de Bloco</h3>
+                <p class="text-slate-400 text-sm mt-2">O atacante faz a abordagem do remate após simular um bloco na rede. Excelente para coordenação de tempo de salto.</p>
+                <div class="mt-4 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
+                    <span>Intensidade: Alta</span>
+                    <span>Jogadores: 3+</span>
+                </div>
+            </div>
+
+            <!-- Drill 4 -->
+            <div class="drill-card bg-slate-950 border border-slate-800 rounded-2xl p-6 hover:border-orange-500/30 transition-all group" data-category="servico">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold py-1 px-2.5 rounded-full uppercase">Serviço</span>
+                    <span class="text-slate-500 text-xs flex items-center gap-1"><i class="fa-regular fa-clock"></i> 10m</span>
+                </div>
+                <h3 class="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">Serviço ao Alvo Geométrico</h3>
+                <p class="text-slate-400 text-sm mt-2">Colocação de cones ou tapetes nas zonas mais recuadas e laterais do campo adversário para testar a precisão.</p>
+                <div class="mt-4 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
+                    <span>Intensidade: Média</span>
+                    <span>Jogadores: Individual</span>
+                </div>
+            </div>
+
+            <!-- Drill 5 -->
+            <div class="drill-card bg-slate-950 border border-slate-800 rounded-2xl p-6 hover:border-orange-500/30 transition-all group" data-category="rececao">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold py-1 px-2.5 rounded-full uppercase">Manchete / Receção</span>
+                    <span class="text-slate-500 text-xs flex items-center gap-1"><i class="fa-regular fa-clock"></i> 15m</span>
+                </div>
+                <h3 class="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">Defesa de Reação em Baixo</h3>
+                <p class="text-slate-400 text-sm mt-2">Defesas a bolas curtas largadas propositadamente pelo treinador. Focado na flexibilidade abdominal e velocidade.</p>
+                <div class="mt-4 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
+                    <span>Intensidade: Muito Alta</span>
+                    <span>Jogadores: 2+</span>
+                </div>
+            </div>
+
+            <!-- Drill 6 -->
+            <div class="drill-card bg-slate-950 border border-slate-800 rounded-2xl p-6 hover:border-orange-500/30 transition-all group" data-category="ataque">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-bold py-1 px-2.5 rounded-full uppercase">Remate / Bloco</span>
+                    <span class="text-slate-500 text-xs flex items-center gap-1"><i class="fa-regular fa-clock"></i> 20m</span>
+                </div>
+                <h3 class="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">Muralha Tripla defensiva</h3>
+                <p class="text-slate-400 text-sm mt-2">Três bloqueadores trabalham em conjunto para ler o movimento do distribuidor adversário e fechar a linha.</p>
+                <div class="mt-4 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
+                    <span>Intensidade: Elevada</span>
+                    <span>Jogadores: 4+</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ASSISTENTE DE VOLEIBOL AI (GEMINI ENGINE) -->
+    <section id="gemini-chat" class="bg-slate-950 py-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Introdução ao Treinador AI -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs uppercase tracking-widest font-bold py-1 px-3 rounded-full">
+                        Tecnologia Gemini AI
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-black text-white leading-tight">
+                        Consulta o nosso <span class="text-orange-500">Treinador AI</span> Inteligente
+                    </h2>
+                    <p class="text-slate-400">
+                        Tens dúvidas sobre sistemas de rotação (como o 5-1 ou o 4-2 com infiltração)? Queres regras oficiais de voleibol de praia ou de pavilhão? 
+                    </p>
+                    <p class="text-slate-400">
+                        O nosso modelo avançado de Inteligência Artificial está programado para atuar como o teu mentor de voleibol pessoal.
+                    </p>
+                    
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider">Perguntas Recomendadas:</h4>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="setSamplePrompt('Como funciona o sistema tático 5-1 no voleibol?')" class="text-left text-xs bg-slate-800 hover:bg-slate-750 text-slate-300 py-2 px-3 rounded-xl transition-all border border-slate-700/50 flex items-center justify-between">
+                                <span>"Como funciona o sistema tático 5-1?"</span>
+                                <i class="fa-solid fa-arrow-right text-orange-500"></i>
+                            </button>
+                            <button onclick="setSamplePrompt('Dá-me 3 exercícios para melhorar o meu toque de passe.')" class="text-left text-xs bg-slate-800 hover:bg-slate-750 text-slate-300 py-2 px-3 rounded-xl transition-all border border-slate-700/50 flex items-center justify-between">
+                                <span>"Exercícios para melhorar o passe"</span>
+                                <i class="fa-solid fa-arrow-right text-orange-500"></i>
+                            </button>
+                            <button onclick="setSamplePrompt('Quais são as principais funções de um Líbero no voleibol?')" class="text-left text-xs bg-slate-800 hover:bg-slate-750 text-slate-300 py-2 px-3 rounded-xl transition-all border border-slate-700/50 flex items-center justify-between">
+                                <span>"Quais as funções do Líbero?"</span>
+                                <i class="fa-solid fa-arrow-right text-orange-500"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Box -->
+                <div class="lg:col-span-7">
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[500px]">
+                        
+                        <!-- Header do Chat -->
+                        <div class="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-orange-500 text-white w-10 h-10 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Treinador Virtual VoleiHub</h3>
+                                    <span class="text-emerald-500 text-[10px] font-semibold flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Online com Gemini AI
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                                Powered by Gemini 2.5
+                            </div>
+                        </div>
+
+                        <!-- Zona de Conversa -->
+                        <div id="chat-messages" class="flex-1 p-6 overflow-y-auto space-y-4 text-sm flex flex-col">
+                            <!-- Mensagem Inicial -->
+                            <div class="bg-slate-850 text-slate-300 p-4 rounded-2xl max-w-[85%] border border-slate-800 self-start">
+                                Olá! Sou o teu Treinador Virtual de Voleibol. Posso ajudar-te com táticas, regras, exercícios de treino e dicas de jogo. Qual é a tua questão hoje?
+                            </div>
+                        </div>
+
+                        <!-- Estado de Loading -->
+                        <div id="chat-loading" class="hidden px-6 py-3 bg-slate-900 text-slate-400 text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-spinner animate-spin text-orange-500"></i> O Treinador está a estruturar a melhor resposta...
+                        </div>
+
+                        <!-- Input de Mensagem -->
+                        <div class="p-4 bg-slate-950 border-t border-slate-800">
+                            <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
+                                <input type="text" id="chat-input" placeholder="Escreve aqui a tua pergunta..." class="flex-1 bg-slate-900 border border-slate-800 hover:border-slate-700 focus:border-orange-500 focus:outline-none text-slate-100 rounded-xl px-4 py-3 text-sm transition-all">
+                                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold p-3 rounded-xl transition-all flex items-center justify-center w-12 h-12 shadow-md">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CRÉDITOS -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-12 mt-auto text-center text-sm text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            <div class="flex justify-center items-center gap-2 text-orange-500 font-extrabold text-lg">
+                <i class="fa-solid fa-volleyball"></i> VOLEIHUB
+            </div>
+            <p>O teu centro digital integrado de táticas, ferramentas e aprendizagem sobre voleibol.</p>
+            <div class="flex justify-center gap-6 text-slate-400 text-lg">
+                <a href="#" class="hover:text-orange-500"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-orange-500"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="hover:text-orange-500"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+            <p class="text-[11px] pt-4">&copy; 2026 VoleiHub. Desenvolvido para entusiastas e profissionais de voleibol.</p>
+        </div>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT INTEGRADA -->
+    <script>
+        // CONFIGURAÇÕES DO GEMINI API
+        const apiKey = ""; // A chave é gerida dinamicamente no ambiente seguro
+        const modelName = "gemini-2.5-flash-preview-09-2025";
+
+        // MENSAGEM DO SISTEMA PARA MODELAR O MODELO DE COMPORTAMENTO
+        const systemPrompt = "Tu és o Treinador AI do VoleiHub, um experiente treinador profissional de voleibol e preparador físico. Responde detalhadamente em português de Portugal (PT-PT). Usa jargão técnico correto do voleibol (distribuidor, remate, bloco, passe de manchete, receção). Estrutura as tuas respostas de forma clara, usando listas se necessário.";
+
+        // --- SISTEMA DE DRAG & DROP PARA PRANCHETA TÁTICA ---
+        const court = document.getElementById('volleyball-court');
+        const players = document.querySelectorAll('.player-node');
+
+        let activePlayer = null;
+        let isDragging = false;
+        let offset = { x: 0, y: 0 };
+
+        players.forEach(player => {
+            // Eventos para Desktop
+            player.addEventListener('mousedown', (e) => {
+                startDragging(player, e.clientX, e.clientY);
+            });
+
+            // Eventos para Dispositivos Móveis
+            player.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                startDragging(player, touch.clientX, touch.clientY);
+            }, { passive: true });
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            drag(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                drag(touch.clientX, touch.clientY);
+            }
+        }, { passive: false });
+
+        document.addEventListener('mouseup', endDragging);
+        document.addEventListener('touchend', endDragging);
+
+        function startDragging(element, clientX, clientY) {
+            activePlayer = element;
+            isDragging = true;
+            const rect = element.getBoundingClientRect();
+            offset.x = clientX - rect.left;
+            offset.y = clientY - rect.top;
+            element.style.zIndex = "100";
+        }
+
+        function drag(clientX, clientY) {
+            if (!isDragging || !activePlayer) return;
+
+            const courtRect = court.getBoundingClientRect();
+            
+            // Calcular nova posição relativa
+            let x = clientX - courtRect.left - offset.x;
+            let y = clientY - courtRect.top - offset.y;
+
+            // Restringir limites de movimento para não sair do campo
+            const maxRight = courtRect.width - activePlayer.offsetWidth;
+            const maxBottom = courtRect.height - activePlayer.offsetHeight;
+
+            x = Math.max(0, Math.min(x, maxRight));
+            y = Math.max(0, Math.min(y, maxBottom));
+
+            // Converter para percentagem para manter consistência responsiva
+            const posXPercent = (x / courtRect.width) * 100;
+            const posYPercent = (y / courtRect.height) * 100;
+
+            activePlayer.style.left = posXPercent + '%';
+            activePlayer.style.top = posYPercent + '%';
+            activePlayer.style.bottom = 'auto'; // Remove bottom resetado se houver
+        }
+
+        function endDragging() {
+            if (isDragging && activePlayer) {
+                activePlayer.style.zIndex = activePlayer.id === "p-ball" ? "30" : "20";
+                isDragging = false;
+                activePlayer = null;
+            }
+        }
+
+        // --- SISTEMAS TÁTICOS PRÉ-CONFIGURADOS ---
+        const systems = {
+            base: {
+                'p-distribuidor': { bottom: '12%', left: '45%' },
+                'p-oposto': { bottom: '38%', left: '78%' },
+                'p-central1': { bottom: '38%', left: '45%' },
+                'p-central2': { bottom: '12%', left: '15%' },
+                'p-ponta1': { bottom: '38%', left: '15%' },
+                'p-libero': { bottom: '12%', left: '78%' },
+                'p-ball': { bottom: '25%', left: '48%' }
+            },
+            'rececao-w': {
+                'p-distribuidor': { bottom: '35%', left: '60%' },
+                'p-oposto': { bottom: '20%', left: '80%' },
+                'p-central1': { bottom: '40%', left: '48%' },
+                'p-central2': { bottom: '10%', left: '50%' },
+                'p-ponta1': { bottom: '22%', left: '20%' },
+                'p-libero': { bottom: '15%', left: '35%' },
+                'p-ball': { bottom: '48%', left: '15%' }
+            },
+            'ataque-k1': {
+                'p-distribuidor': { bottom: '45%', left: '62%' },
+                'p-oposto': { bottom: '43%', left: '82%' },
+                'p-central1': { bottom: '43%', left: '50%' },
+                'p-central2': { bottom: '15%', left: '50%' },
+                'p-ponta1': { bottom: '43%', left: '18%' },
+                'p-libero': { bottom: '15%', left: '22%' },
+                'p-ball': { bottom: '45%', left: '50%' }
+            },
+            'defesa-6-atras': {
+                'p-distribuidor': { bottom: '40%', left: '70%' },
+                'p-oposto': { bottom: '40%', left: '30%' },
+                'p-central1': { bottom: '42%', left: '50%' },
+                'p-central2': { bottom: '15%', left: '25%' },
+                'p-ponta1': { bottom: '15%', left: '75%' },
+                'p-libero': { bottom: '8%', left: '50%' },
+                'p-ball': { bottom: '35%', left: '48%' }
+            }
+        };
+
+        function applySystem(systemName) {
+            const config = systems[systemName];
+            if (!config) return;
+
+            for (const id in config) {
+                const player = document.getElementById(id);
+                if (player) {
+                    player.style.transition = "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)";
+                    player.style.bottom = config[id].bottom;
+                    player.style.left = config[id].left;
+                    player.style.top = 'auto';
+                    
+                    // Remover a transição após terminar o efeito para não afetar o drag&drop
+                    setTimeout(() => {
+                        player.style.transition = "none";
+                    }, 500);
+                }
+            }
+        }
+
+        function resetBoard() {
+            applySystem('base');
+        }
+
+        // --- SISTEMA DE MARCADOR DE PONTOS ---
+        let pointsHome = 0;
+        let pointsAway = 0;
+        let setsHome = 0;
+        let setsAway = 0;
+        let activeService = 'home'; // 'home' ou 'away'
+
+        function updateScoreboardUI() {
+            document.getElementById('score-home').textContent = pointsHome.toString().padStart(2, '0');
+            document.getElementById('score-away').textContent = pointsAway.toString().padStart(2, '0');
+            document.getElementById('sets-home').textContent = setsHome;
+            document.getElementById('sets-away').textContent = setsAway;
+
+            // Indicadores de Serviço
+            const svcHome = document.getElementById('service-home');
+            const svcAway = document.getElementById('service-away');
+
+            if (activeService === 'home') {
+                svcHome.className = "text-xs bg-orange-500 text-white px-2.5 py-1 rounded-full font-bold uppercase flex items-center gap-1";
+                svcAway.className = "text-xs bg-slate-800 text-slate-500 px-2.5 py-1 rounded-full font-bold uppercase flex items-center gap-1 cursor-pointer hover:bg-slate-750 transition-colors";
+            } else {
+                svcAway.className = "text-xs bg-orange-500 text-white px-2.5 py-1 rounded-full font-bold uppercase flex items-center gap-1";
+                svcHome.className = "text-xs bg-slate-800 text-slate-500 px-2.5 py-1 rounded-full font-bold uppercase flex items-center gap-1 cursor-pointer hover:bg-slate-750 transition-colors";
+            }
+
+            // Atualização do indicador de Set atual
+            const totalSets = setsHome + setsAway + 1;
+            document.getElementById('current-set-num').textContent = `${totalSets}º Set`;
+        }
+
+        function changeScore(team, val) {
+            if (team === 'home') {
+                pointsHome = Math.max(0, pointsHome + val);
+                if (val > 0) activeService = 'home'; // Venceu o ponto, ganha o serviço
+            } else {
+                pointsAway = Math.max(0, pointsAway + val);
+                if (val > 0) activeService = 'away';
+            }
+            updateScoreboardUI();
+            checkSetWinner();
+        }
+
+        function changeSet(team, val) {
+            if (team === 'home') {
+                setsHome = Math.max(0, setsHome + val);
+            } else {
+                setsAway = Math.max(0, setsAway + val);
+            }
+            updateScoreboardUI();
+        }
+
+        function toggleService(team) {
+            activeService = team;
+            updateScoreboardUI();
+        }
+
+        function checkSetWinner() {
+            const isTieBreak = (setsHome === 2 && setsAway === 2);
+            const targetPoints = isTieBreak ? 15 : 25;
+
+            // Condição clássica de vitória no voleibol (mínimo target de pontos e 2 pontos de avanço)
+            if (pointsHome >= targetPoints && (pointsHome - pointsAway) >= 2) {
+                showToast("Equipa Caseira venceu o Set!");
+                setsHome++;
+                pointsHome = 0;
+                pointsAway = 0;
+                updateScoreboardUI();
+            } else if (pointsAway >= targetPoints && (pointsAway - pointsHome) >= 2) {
+                showToast("Equipa Visitante venceu o Set!");
+                setsAway++;
+                pointsHome = 0;
+                pointsAway = 0;
+                updateScoreboardUI();
+            }
+        }
+
+        function requestTimeout() {
+            showToast("Pediu Tempo! Pausa estratégica de 30 segundos.");
+        }
+
+        function switchSides() {
+            // Troca de pontos e sets entre as duas equipas
+            const tempPoints = pointsHome;
+            pointsHome = pointsAway;
+            pointsAway = tempPoints;
+
+            const tempSets = setsHome;
+            setsHome = setsAway;
+            setsAway = tempSets;
+
+            activeService = activeService === 'home' ? 'away' : 'home';
+            showToast("Campos e Pontuações trocadas!");
+            updateScoreboardUI();
+        }
+
+        function resetMatch() {
+            if (confirm("Tens a certeza que queres reiniciar o marcador do jogo?")) {
+                pointsHome = 0;
+                pointsAway = 0;
+                setsHome = 0;
+                setsAway = 0;
+                activeService = 'home';
+                updateScoreboardUI();
+                showToast("Jogo reiniciado.");
+            }
+        }
+
+        // --- BIBLIOTECA DE FILTRAGEM DE TREINOS ---
+        function filterDrills(category) {
+            const cards = document.querySelectorAll('.drill-card');
+            const buttons = document.querySelectorAll('.drill-filter-btn');
+
+            // Atualização visual dos botões
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-orange-500', 'text-white');
+                btn.classList.add('bg-slate-800', 'text-slate-300', 'hover:bg-slate-700');
+            });
+
+            // Adicionar destaque ao botão ativo
+            event.target.classList.remove('bg-slate-800', 'text-slate-300', 'hover:bg-slate-700');
+            event.target.classList.add('bg-orange-500', 'text-white');
+
+            // Filtragem real dos cartões
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // --- SISTEMA DE CHAT DO ASSISTENTE AI (GEMINI) ---
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatLoading = document.getElementById('chat-loading');
+
+        function setSamplePrompt(promptText) {
+            chatInput.value = promptText;
+            chatInput.focus();
+        }
+
+        async function handleChatSubmit(event) {
+            event.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Renderizar Mensagem do Utilizador
+            appendMessage(message, 'user');
+            chatInput.value = '';
+
+            // Mostrar Estado de Loading
+            chatLoading.classList.remove('hidden');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await callGeminiAPI(message);
+                chatLoading.classList.add('hidden');
+                appendMessage(response, 'assistant');
+            } catch (err) {
+                chatLoading.classList.add('hidden');
+                appendMessage("Desculpa, ocorreu um erro de comunicação com o Treinador AI. Por favor, tenta novamente mais tarde.", 'assistant');
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = sender === 'user' 
+                ? "bg-orange-500 text-white p-4 rounded-2xl max-w-[85%] self-end shadow-md"
+                : "bg-slate-800 text-slate-200 p-4 rounded-2xl max-w-[85%] self-start border border-slate-700/50 shadow-sm";
+            
+            // Permitir formatação simples de quebras de linha nas respostas
+            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // COMUNICAÇÃO COM O MODELO GEMINI UTILIZANDO EXPONENTIAL BACKOFF
+        async function callGeminiAPI(userQuery) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const maxRetries = 5;
+            let delay = 1000;
+
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Não obtive resposta do Treinador AI.";
+                    }
+                } catch (error) {
+                    if (attempt === maxRetries) {
+                        throw error;
+                    }
+                }
+                
+                // Exponential Backoff
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+            }
+            throw new Error("Falha após várias tentativas.");
+        }
+
+        // --- SISTEMA INTERNO DE TOAST NOTIFICATIONS (Substitui Alertas) ---
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 bg-orange-600 text-white text-sm font-bold py-3.5 px-6 rounded-2xl shadow-2xl z-50 transition-all duration-300 transform translate-y-10 opacity-0 border border-orange-500";
+            toast.innerHTML = `<i class="fa-solid fa-bell mr-2 animate-bounce"></i> ${message}`;
+            
+            document.body.appendChild(toast);
+            
+            // Animar Entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            // Animar Saída e Destruir
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // --- MENU DE NAVEGAÇÃO MOBILE ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Fechar menu ao clicar num item de navegação
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Inicializar com Valores Padrão
+        updateScoreboardUI();
+    </script>
+</body>
+</html>
