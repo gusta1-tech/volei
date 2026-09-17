@@ -31,3 +31,29 @@
     color: rgb(225, 255, 91);
     font-size: 16px;
 }
+
+table{
+    width: 50%;
+    border-collapse: collapse;
+    margin: 50px auto;
+}
+
+thead th{
+    background-color: rgb(22, 2, 94);
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+tbody td{
+    padding: 8px;
+    border-bottom: 1px solid rgb(184, 184, 231);
+}
+
+tr:nth-child(even){
+    background-color: rgb(71, 71, 245);
+}
+
+th:hover{
+    background-color: whitesmoke;
+}
